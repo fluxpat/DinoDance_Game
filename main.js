@@ -1,6 +1,8 @@
 const game = new Game();
+let font;
 
 function preload() {
+    font = loadFont("assets/FutilePro.ttf");
     game.preload();
 }
 
@@ -14,5 +16,6 @@ function draw() {
 }
 
 function keyPressed() {
-
+    
 }
+

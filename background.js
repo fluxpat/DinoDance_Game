@@ -16,21 +16,21 @@ class Background {
     }
     draw() {
         // Rendering the sky
-        this.xSky -= 0.2;
+        this.xSky -= 0.5;
         image(this.bgSky, this.xSky, 0, width, height)
         image(this.bgSky, this.xSky + width, 0, width, height)
         if (this.xSky <= -width) {
             this.xSky = 0;
         }
         // Rendering the far BACK hills
-        this.xHills2 += 0.1
+        this.xHills2 += 0.2
         image(this.bgHills2, this.xHills2, -50, width, height)
         image(this.bgHills2, this.xHills2 - width, -50, width, height)
         if (this.xHills2 >= width) {
             this.xHills2 = 0;
         }
         // Rendering the far FRONT hills
-        this.xHills1 -= 0.1
+        this.xHills1 -= 0.3
         image(this.bgHills1, this.xHills1, 0, width, height)
         image(this.bgHills1, this.xHills1 + width, 0, width, height)
         if (this.xHills1 <= -width) {
