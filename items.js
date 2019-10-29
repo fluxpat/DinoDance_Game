@@ -8,7 +8,7 @@ class Items {
         this.keyW = loadImage('assets/Keys/W-Key.png');
         this.keyE = loadImage('assets/Keys/E-Key.png');
         this.keyR = loadImage('assets/Keys/R-Key.png');
-        // Player 2:
+        // Player 2's keys:
         this.keyU = loadImage('assets/Keys/U-Key.png');
         this.keyI = loadImage('assets/Keys/I-Key.png');
         this.keyO = loadImage('assets/Keys/O-Key.png');
@@ -24,16 +24,16 @@ class Items {
         this.keyAction();
         // Player 1's food
         push();
-        tint(255, 80);
-        image(this.banana, 455, 590, 40, 40); // BANANA
-        image(this.grapes, 505, 590, 40, 40); // GRAPES
-        image(this.aubergine, 555, 590, 40, 40); // EGGPLANT
-        image(this.apple, 605, 590, 40, 40); // APPLE
+        tint(255, 110);
+        image(this.banana, 455, 600, 40, 40); // BANANA
+        image(this.grapes, 505, 600, 40, 40); // GRAPES
+        image(this.aubergine, 555, 600, 40, 40); // EGGPLANT
+        image(this.apple, 605, 600, 40, 40); // APPLE
         // Player 2's food
-        image(this.banana, 755, 590, 40, 40); // BANANA
-        image(this.grapes, 805, 590, 40, 40); // GRAPES
-        image(this.aubergine, 855, 590, 40, 40); // EGGPLANT
-        image(this.apple, 905, 590, 40, 40); // APPLE
+        image(this.banana, 755, 600, 40, 40); // BANANA
+        image(this.grapes, 805, 600, 40, 40); // GRAPES
+        image(this.aubergine, 855, 600, 40, 40); // EGGPLANT
+        image(this.apple, 905, 600, 40, 40); // APPLE
         pop();
     }
 
@@ -41,6 +41,7 @@ class Items {
         // Player 1's controls
         if (keyIsDown(81)) { // Q-key
             image(this.keyQ, 450, 635, 50, 50, 32, 0, 32, 32);
+            //call collision function (static shadow picture, fruit)
         } else { image(this.keyQ, 450, 635, 50, 50, 0, 0, 32, 32) };
         if (keyIsDown(87)) { // W-key
             image(this.keyW, 500, 635, 50, 50, 32, 0, 32, 32);
