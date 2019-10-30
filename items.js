@@ -41,7 +41,6 @@ class Items {
         // Player 1's controls
         if (keyIsDown(81)) { // Q-key
             image(this.keyQ, 450, 635, 50, 50, 32, 0, 32, 32);
-            //call collision function (static shadow picture, fruit)
         } else { image(this.keyQ, 450, 635, 50, 50, 0, 0, 32, 32) };
         if (keyIsDown(87)) { // W-key
             image(this.keyW, 500, 635, 50, 50, 32, 0, 32, 32);

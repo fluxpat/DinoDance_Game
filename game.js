@@ -6,8 +6,8 @@ class Game {
         // FOREGROUND SETTING + TEXT
         this.foreground = new Foreground();
         // CHARACTERS
-        this.player = new Player(0.2);
-        this.player2 = new Player2(0.2);
+        this.player = new Player(0.18);
+        this.player2 = new Player2(0.18);
         // ITEMS & KEYS
         this.items = new Items();
         // FRUITS GENERATION
@@ -36,28 +36,38 @@ class Game {
     }
 
     draw() {
+        // console.log(this.fruitsArr);
+        // console.log(frameRate())
         this.background.draw();
         // Remove fruit when they leave the screen
         // AND reset players' Streak combos if they lose a fruit
-        this.fruitsArr.forEach(
-            (fruit, index) => {
-                fruit.draw();
-                if (fruit.playerID === 1 && fruit.y > 650) {
-                    this.fruitsArr.splice(index, 1);
-                    this.p1streak = 0;
+        if (gameScreen == "play") {
+            this.fruitsArr.forEach(
+                (fruit, index) => {
+                    fruit.draw();
+                    if (fruit.playerID === 2 && fruit.y > 650) {
+                        this.fruitsArr.splice(index, 1);
+                        this.p2streak = 0;
+                    }
+                    if (fruit.playerID === 1 && fruit.y > 650) {
+                        this.fruitsArr.splice(index, 1);
+                        this.p1streak = 0;
+                    }
                 }
-                if (fruit.playerID === 2 && fruit.y > 650) {
-                    this.fruitsArr.splice(index, 1);
-                    this.p2streak = 0;
-                }
-            }
-        )
+            )
+        } else { this.fruitsArr = [] }
         this.foreground.draw();
         this.player.draw();
         this.player.animation();
         this.player2.draw();
         this.player2.animation();
         this.items.draw();
+        // Exit settings:
+        textFont(font);
+        textSize(20)
+        textAlign(LEFT)
+        fill(255, 200, 50);
+        text("Press ESC to exit game", 20, 30);
         // SCORING SYSTEM:
         textFont(font);
         textSize(60)
@@ -82,9 +92,17 @@ class Game {
         text(game.p2streak, width - 107, 673);
         fill(245, 245, 245);
         text(game.p2streak, width - 110, 670);
+        // 
     }
 
     keyPressed() {
+        /* --------------------------------------If you press ESC quit game to home screen-------------------------------------- */
+        if (keyIsDown(27)) {
+            gameScreen = "home";
+            musicDisco.stop();
+            clearInterval(gameTimer);
+            gameSeconds = 0;
+        }
         this.fruitsArr.forEach(
             (fruit, index) => {
                 // PLAYER 1's key presses for fruits
@@ -201,42 +219,104 @@ class Game {
         )
     }
 
-    timeIt = () => { // CHOOSES THE SOUND TRACK AND DIFFICULTY BASED ON "gameMode"
-        if (gameMode === 1) {
-            this.counter = (this.counter + 1) % timesDisco.length;
+    timeIt = () => { // CHOOSES THE SOUND TRACK AND DIFFICULTY BASED ON "gameSong" and "gameDifficulty"
+        if (gameDifficulty == "easy") {
             // Pushing fruits into array based on sheet music:
-            if (timesDisco[this.counter].includes('ban')) {
+            if (timesDiscoEasy[this.counter].includes('ban')) {
                 this.fruitsArr.push(new banana(1));
                 this.fruitsArr.push(new banana(2));
             }
-            if (timesDisco[this.counter].includes('gra')) {
+            if (timesDiscoEasy[this.counter].includes('gra')) {
                 this.fruitsArr.push(new grapes(1));
                 this.fruitsArr.push(new grapes(2));
             }
-            if (timesDisco[this.counter].includes('aub')) {
+            if (timesDiscoEasy[this.counter].includes('aub')) {
                 this.fruitsArr.push(new aubergine(1));
                 this.fruitsArr.push(new aubergine(2));
             }
-            if (timesDisco[this.counter].includes('app')) {
+            if (timesDiscoEasy[this.counter].includes('app')) {
                 this.fruitsArr.push(new apple(1));
                 this.fruitsArr.push(new apple(2));
             }
+            if (gameScreen == "play") {
+                this.counter = (this.counter + 1) % timesDiscoEasy.length;
+            } else { this.counter = 0 }
+        }
+        if (gameDifficulty == "medium") {
+            // Pushing fruits into array based on sheet music:
+            if (timesDiscoMedium[this.counter].includes('ban')) {
+                this.fruitsArr.push(new banana(1));
+                this.fruitsArr.push(new banana(2));
+            }
+            if (timesDiscoMedium[this.counter].includes('gra')) {
+                this.fruitsArr.push(new grapes(1));
+                this.fruitsArr.push(new grapes(2));
+            }
+            if (timesDiscoMedium[this.counter].includes('aub')) {
+                this.fruitsArr.push(new aubergine(1));
+                this.fruitsArr.push(new aubergine(2));
+            }
+            if (timesDiscoMedium[this.counter].includes('app')) {
+                this.fruitsArr.push(new apple(1));
+                this.fruitsArr.push(new apple(2));
+            }
+            this.counter = (this.counter + 1) % timesDiscoMedium.length;
         }
     }
 }
 
 // Game Fruit Generation:
 
-const timesDisco = [ // Essentially my music score here where each element of the parent array is a quaver (half a beat (1/4 of a second))
+const timesDiscoEasy = [ // Essentially my music score here where each element of the parent array is a quaver (half a beat (1/4 of a second))
     /* Wait 8 beats before rendering any fruits to allow for first group to fall and player to get ready */
-    // [], [], [], [],
-    // [], [], [], [],
-    // [], [], [], [],
-    // [], [], [], [], // 8 beats ends here (4 seconds)
+    ['app'], [], [], [],
+    ['app'], [], [], [],
+    ['app'], [], [], [],
+    ['app'], [], [], [], // 8 beats ends here (4 seconds)
     ["ban"], [], [], [],
     ["ban"], [], [], [],
     ["ban"], [], [], [],
     ["ban"], [], [], [],
+    // ------------------- 8 seconds
+    ["ban"], [], ["ban"], [],
+    [], [], [], [],
+    ['gra'], [], ['gra'], [],
+    [], [], [], [],
+    [], [], ['aub'], [],
+    [], [], ['aub'], [],
+    ["ban"], [], [], [],
+    ["ban"], [], ['aub'], [],
+    // ------------------- 16 seconds
+    ["app"], [], [], [],
+    ['gra'], [], [], [],
+    ["app"], [], [], [],
+    ['gra'], [], [], [],
+    ["ban"], [], ['grape'], [],
+    ["aub"], [], ['app'], [],
+    ["ban"], [], ['grape'], [],
+    ["aub"], [], ['app'], [],
+    // ------------------- 24 seconds
+    ["app"], [], ["app"], [],
+    [], [], [], [],
+    ['aub'], [], ['aub'], [],
+    [], [], [], [],
+    ["ban"], [], [], [],
+    ["ban"], [], [], [],
+    [], [], ['aub'], [],
+    [], [], ['aub'], ['app'],
+    // ------------------- 32 seconds
+]
+
+const timesDiscoMedium = [ // Essentially my music score here where each element of the parent array is a quaver (half a beat (1/4 of a second))
+    /* Wait 8 beats before rendering any fruits to allow for first group to fall and player to get ready */
+    ["ban"], [], [], [],
+    ["gra"], [], [], [],
+    ["aub"], [], [], [],
+    ["app"], [], [], [], // 8 beats ends here (4 seconds)
+    ["ban"], [], [], [],
+    ["gra"], [], [], [],
+    ["aub"], [], [], [],
+    ["app"], [], [], [],
     // ------------------- 8 seconds
     ["ban"], [], ["ban"], [],
     [], [], ["ban"], [],
@@ -255,7 +335,7 @@ const timesDisco = [ // Essentially my music score here where each element of th
     ["ban"], ['app'], ['gra', 'aub'], [],
     ["ban"], ['app'], [], ['gra', 'aub'],
     ["ban"], ['app'], ['gra', 'aub'], [],
-    // ------------------- 22 seconds
+    // ------------------- 24 seconds
     ["ban"], [], ["ban"], [],
     [], [], ["ban"], [],
     ['gra'], [], ['gra'], [],
@@ -264,5 +344,5 @@ const timesDisco = [ // Essentially my music score here where each element of th
     ["ban"], ['aub'], ['aub'], [],
     ["ban"], ['app'], ['aub'], ['app'],
     ["ban"], ['gra'], ['aub'], ['app'],
-    // ------------------- 30 seconds
+    // ------------------- 32 seconds
 ]

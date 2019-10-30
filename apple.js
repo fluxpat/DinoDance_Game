@@ -18,6 +18,6 @@ class apple {
         } else if (this.playerID === 2) {
             image(this.apple, 905, this.y, 40, 40)
         }
-        this.y += 2.5;
+        this.y += 2;
     }
 }

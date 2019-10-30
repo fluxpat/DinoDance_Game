@@ -18,6 +18,6 @@ class banana {
         } else if (this.playerID === 2) {
             image(this.banana, 755, this.y, 40, 40)
         }
-        this.y += 2.5;
+        this.y += 2;
     }
 }
