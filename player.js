@@ -1,15 +1,15 @@
 class Player {
-    constructor(speed) {
+    constructor() {
         this.idleAnimation = [];
         this.animationIndex = 0;
-        this.animationSpeed = speed;
+        this.animationSpeed = 0.18;
         // this.animationType = animationType;
     }
 
     preload() {
         console.log('player preload')
         this.dinoIdleJSON = loadJSON('dinoIdle.json')
-        this.dinoBlueSS = loadImage('assets/Player/DinoYellow.png')
+        this.dinoYellowSS = loadImage('assets/Player/DinoYellow.png')
     }
 
     setup() {
@@ -17,7 +17,7 @@ class Player {
         let framesIdle = this.dinoIdleJSON.frames; // stores the Array of frame info into framesIdle
         for (let i = 0; i < framesIdle.length; i++) { // looping through the framesIdle array
             let pos = framesIdle[i].position; // for each frame (i) we're extracting the position info which is an OBJECT
-            let img = this.dinoBlueSS.get(pos.x, pos.y, pos.w, pos.h); // each frame image is now stored into the img variable
+            let img = this.dinoYellowSS.get(pos.x, pos.y, pos.w, pos.h); // each frame image is now stored into the img variable
             this.idleAnimation.push(img); // each image is pushed into the idleAnimation array
         }
         console.log(this.idleAnimation);

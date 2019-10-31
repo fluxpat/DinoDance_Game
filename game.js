@@ -6,39 +6,50 @@ class Game {
         // FOREGROUND SETTING + TEXT
         this.foreground = new Foreground();
         // CHARACTERS
-        this.player = new Player(0.18);
-        this.player2 = new Player2(0.18);
+        this.player1 = new Player();
+        this.player2 = new Player2();
         // ITEMS & KEYS
         this.items = new Items();
         // FRUITS GENERATION
         this.fruitsArr = [];
+        // EXPLOSIONS AND FIRES
+        this.explosions1 = new Explosions1()
+        this.explosions2 = new Explosions2()
         // Counters:
         this.counter = 0;
         this.p1score = 0;
         this.p2score = 0;
         this.p1streak = 0;
         this.p2streak = 0;
+        this.p1multi = 1;
+        this.p2multi = 1;
+        // Score color change based on Multiplier:
+        this.p1scoreColor = '#f5f5f5' // WHITE no multi
+        this.p2scoreColor = '#f5f5f5' // WHITE no multi
     }
 
     preload() {
         this.background.preload();
         this.foreground.preload();
-        this.player.preload();
+        this.player1.preload();
         this.player2.preload();
         this.items.preload();
+        this.explosions1.preload();
+        this.explosions2.preload();
     }
 
     setup() {
-        this.player.setup();
+        this.player1.setup();
         this.player2.setup();
+        this.explosions1.setup();
+        this.explosions2.setup();
         // Establish a counter / metronome
         setInterval(this.timeIt, 250);
     }
 
     draw() {
-        // console.log(this.fruitsArr);
-        // console.log(frameRate())
         this.background.draw();
+        /* ----------------------------------------RENDERS THE FRUIT FOR EACH PLAYER---------------------------------------- */
         // Remove fruit when they leave the screen
         // AND reset players' Streak combos if they lose a fruit
         if (gameScreen == "play") {
@@ -56,9 +67,17 @@ class Game {
                 }
             )
         } else { this.fruitsArr = [] }
+        /* ----------------------------------------RESET SCORES WHEN GAME RESTARTS---------------------------------------- */
+        if (gameScreen == "home") {
+            this.p1score = 0;
+            this.p1streak = 0;
+            this.p2score = 0;
+            this.p2streak = 0;
+        }
+        /* ----------------------------------------RENDERING PLAYERS AND FOREGROUND---------------------------------------- */
         this.foreground.draw();
-        this.player.draw();
-        this.player.animation();
+        this.player1.draw();
+        this.player1.animation();
         this.player2.draw();
         this.player2.animation();
         this.items.draw();
@@ -74,11 +93,11 @@ class Game {
         textAlign(CENTER)
         fill(150, 75, 0);
         text(this.p1score, 153, 343);
-        fill(245, 245, 245);
+        fill(this.p1scoreColor);
         text(this.p1score, 150, 340);
         fill(150, 75, 0);
         text(this.p2score, width - 147, 343);
-        fill(245, 245, 245);
+        fill(this.p2scoreColor);
         text(this.p2score, width - 150, 340);
         // STREAK BONUS SYSTEM:
         textFont(font);
@@ -92,68 +111,113 @@ class Game {
         text(game.p2streak, width - 107, 673);
         fill(245, 245, 245);
         text(game.p2streak, width - 110, 670);
-        // 
+        // Streak Multiplier conditions:
+        // Player 1
+        if (this.p1streak >= 40) {
+            this.p1multi = 2
+            this.p1scoreColor = '#2cb5f5' // BLUE 2X multi
+            this.player1.animationSpeed = 1;
+        } else if (this.p1streak >= 20) {
+            this.p1multi = 1.4
+            this.p1scoreColor = '#fee661' // YELLOW 1.4X multi
+            this.player1.animationSpeed = 0.5;
+        } else {
+            this.p1multi = 1;
+            this.p1scoreColor = '#f5f5f5' // WHITE no multi
+            this.player1.animationSpeed = 0.18;
+        }
+        // Player 2
+        if (this.p2streak >= 40) {
+            this.p2multi = 2
+            this.p2scoreColor = '#2cb5f5' // BLUE 2X multi
+            this.player2.animationSpeed = 1;
+        } else if (this.p2streak >= 20) {
+            this.p2multi = 1.4
+            this.p2scoreColor = '#fee661' // YELLOW 1.4X multi
+            this.player2.animationSpeed = 0.5;
+        } else {
+            this.p2multi = 1;
+            this.p2scoreColor = '#f5f5f5' // WHITE no multi
+            this.player2.animationSpeed = 0.18;
+        }
+        /* ----------------------------------RUNNING THE CHECKS FOR WHEN TO ANIMATE EXPLOSIONS---------------------------------- */
+        this.explosions1.draw();
+        this.explosions2.draw();
     }
 
     keyPressed() {
         /* --------------------------------------If you press ESC quit game to home screen-------------------------------------- */
         if (keyIsDown(27)) {
             gameScreen = "home";
-            musicDisco.stop();
+            musicDisco.stop(); // Have hard coded the song here. Will need to make dynamic for when more songs are added.
             clearInterval(gameTimer);
             gameSeconds = 0;
         }
+
         this.fruitsArr.forEach(
             (fruit, index) => {
                 // PLAYER 1's key presses for fruits
                 if (fruit.playerID === 1) {
                     if (keyIsDown(81) && fruit.type === 'banana') {
-                        if (fruit.y > 590 && fruit.y < 610) {
-                            if (fruit.y > 597 && fruit.y < 603) { // PERFECT HIT
-                                this.p1score += 20;
-                            } else if (fruit.y > 595 && fruit.y < 605) { // GREAT HIT
-                                this.p1score += 15;
+                        if (fruit.y >= 590 && fruit.y <= 613) {
+                            if (fruit.y >= 597 && fruit.y <= 603) { // PERFECT HIT
+                                this.p1score += 20 * this.p1multi;
+                                this.explosions1.playPerfectQ(); // EXPLOSION!!!!!
+                            } else if (fruit.y >= 595 && fruit.y <= 605) { // GREAT HIT
+                                this.p1score += 15 * this.p1multi;
+                                this.explosions1.playGreatQ(); // EXPLOSION!!!!!
                             } else { // GOOD HIT
-                                this.p1score += 10;
+                                this.p1score += 10 * this.p1multi;
+                                this.explosions1.playGoodQ(); // EXPLOSION!!!!!
                             }
                             this.p1streak++;
                             this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
                         }
                     }
                     if (keyIsDown(87) && fruit.type === 'grapes') {
-                        if (fruit.y > 590 && fruit.y < 610) {
+                        if (fruit.y > 590 && fruit.y < 613) {
                             if (fruit.y > 597 && fruit.y < 603) { // PERFECT HIT
-                                this.p1score += 20;
+                                this.p1score += 20 * this.p1multi;
+                                this.explosions1.playPerfectW(); // EXPLOSION!!!!!
                             } else if (fruit.y > 595 && fruit.y < 605) { // GREAT HIT
-                                this.p1score += 15;
+                                this.p1score += 15 * this.p1multi;
+                                this.explosions1.playGreatW(); // EXPLOSION!!!!!
                             } else { // GOOD HIT
-                                this.p1score += 10;
+                                this.p1score += 10 * this.p1multi;
+                                this.explosions1.playGoodW(); // EXPLOSION!!!!!
                             }
                             this.p1streak++;
                             this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
+
                         }
                     }
                     if (keyIsDown(69) && fruit.type === 'aubergine') {
-                        if (fruit.y > 590 && fruit.y < 610) {
+                        if (fruit.y > 590 && fruit.y < 613) {
                             if (fruit.y > 597 && fruit.y < 603) { // PERFECT HIT
-                                this.p1score += 20;
+                                this.p1score += 20 * this.p1multi;
+                                this.explosions1.playPerfectE(); // EXPLOSION!!!!!
                             } else if (fruit.y > 595 && fruit.y < 605) { // GREAT HIT
-                                this.p1score += 15;
+                                this.p1score += 15 * this.p1multi;
+                                this.explosions1.playGreatE(); // EXPLOSION!!!!!
                             } else { // GOOD HIT
-                                this.p1score += 10;
+                                this.p1score += 10 * this.p1multi;
+                                this.explosions1.playGoodE(); // EXPLOSION!!!!!
                             }
                             this.p1streak++;
                             this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
                         }
                     }
                     if (keyIsDown(82) && fruit.type === 'apple') {
-                        if (fruit.y > 590 && fruit.y < 610) {
+                        if (fruit.y > 590 && fruit.y < 613) {
                             if (fruit.y > 597 && fruit.y < 603) { // PERFECT HIT
-                                this.p1score += 20;
+                                this.p1score += 20 * this.p1multi;
+                                this.explosions1.playPerfectR(); // EXPLOSION!!!!!
                             } else if (fruit.y > 595 && fruit.y < 605) { // GREAT HIT
-                                this.p1score += 15;
+                                this.p1score += 15 * this.p1multi;
+                                this.explosions1.playGreatR(); // EXPLOSION!!!!!
                             } else { // GOOD HIT
-                                this.p1score += 10;
+                                this.p1score += 10 * this.p1multi;
+                                this.explosions1.playGoodR(); // EXPLOSION!!!!!
                             }
                             this.p1streak++;
                             this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
@@ -163,52 +227,64 @@ class Game {
                 // PLAYER 2's key presses for fruit
                 else if (fruit.playerID === 2) {
                     if (keyIsDown(85) && fruit.type === 'banana') {
-                        if (fruit.y > 590 && fruit.y < 610) {
+                        if (fruit.y > 590 && fruit.y < 613) {
                             if (fruit.y > 597 && fruit.y < 603) { // PERFECT HIT
-                                this.p2score += 20;
+                                this.p2score += 20 * this.p2multi;
+                                this.explosions2.playPerfectU(); // EXPLOSION!!!!!
                             } else if (fruit.y > 595 && fruit.y < 605) { // GREAT HIT
-                                this.p2score += 15;
+                                this.p2score += 15 * this.p2multi;
+                                this.explosions2.playGreatU(); // EXPLOSION!!!!!
                             } else { // GOOD HIT
-                                this.p2score += 10;
+                                this.p2score += 10 * this.p2multi;
+                                this.explosions2.playGoodU(); // EXPLOSION!!!!!
                             }
                             this.p2streak++;
                             this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
                         }
                     }
                     if (keyIsDown(73) && fruit.type === 'grapes') {
-                        if (fruit.y > 590 && fruit.y < 610) {
+                        if (fruit.y > 590 && fruit.y < 613) {
                             if (fruit.y > 597 && fruit.y < 603) { // PERFECT HIT
-                                this.p2score += 20;
+                                this.p2score += 20 * this.p2multi;
+                                this.explosions2.playPerfectI(); // EXPLOSION!!!!!
                             } else if (fruit.y > 595 && fruit.y < 605) { // GREAT HIT
-                                this.p2score += 15;
+                                this.p2score += 15 * this.p2multi;
+                                this.explosions2.playGreatI(); // EXPLOSION!!!!!
                             } else { // GOOD HIT
-                                this.p2score += 10;
+                                this.p2score += 10 * this.p2multi;
+                                this.explosions2.playGoodI(); // EXPLOSION!!!!!
                             }
                             this.p2streak++;
                             this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
                         }
                     }
                     if (keyIsDown(79) && fruit.type === 'aubergine') {
-                        if (fruit.y > 590 && fruit.y < 610) {
+                        if (fruit.y > 590 && fruit.y < 613) {
                             if (fruit.y > 597 && fruit.y < 603) { // PERFECT HIT
-                                this.p2score += 20;
+                                this.p2score += 20 * this.p2multi;
+                                this.explosions2.playPerfectO(); // EXPLOSION!!!!!
                             } else if (fruit.y > 595 && fruit.y < 605) { // GREAT HIT
-                                this.p2score += 15;
+                                this.p2score += 15 * this.p2multi;
+                                this.explosions2.playGreatO(); // EXPLOSION!!!!!
                             } else { // GOOD HIT
-                                this.p2score += 10;
+                                this.p2score += 10 * this.p2multi;
+                                this.explosions2.playGoodO(); // EXPLOSION!!!!!
                             }
                             this.p2streak++;
                             this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
                         }
                     }
                     if (keyIsDown(80) && fruit.type === 'apple') {
-                        if (fruit.y > 590 && fruit.y < 610) {
+                        if (fruit.y > 590 && fruit.y < 613) {
                             if (fruit.y > 597 && fruit.y < 603) { // PERFECT HIT
-                                this.p2score += 20;
+                                this.p2score += 20 * this.p2multi;
+                                this.explosions2.playPerfectP(); // EXPLOSION!!!!!
                             } else if (fruit.y > 595 && fruit.y < 605) { // GREAT HIT
-                                this.p2score += 15;
+                                this.p2score += 15 * this.p2multi;
+                                this.explosions2.playGreatP(); // EXPLOSION!!!!!
                             } else { // GOOD HIT
-                                this.p2score += 10;
+                                this.p2score += 10 * this.p2multi;
+                                this.explosions2.playGoodP(); // EXPLOSION!!!!!
                             }
                             this.p2streak++;
                             this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
@@ -220,7 +296,7 @@ class Game {
     }
 
     timeIt = () => { // CHOOSES THE SOUND TRACK AND DIFFICULTY BASED ON "gameSong" and "gameDifficulty"
-        if (gameDifficulty == "easy") {
+        if (gameDifficulty === "easy") {
             // Pushing fruits into array based on sheet music:
             if (timesDiscoEasy[this.counter].includes('ban')) {
                 this.fruitsArr.push(new banana(1));
@@ -238,11 +314,11 @@ class Game {
                 this.fruitsArr.push(new apple(1));
                 this.fruitsArr.push(new apple(2));
             }
-            if (gameScreen == "play") {
+            if (gameScreen === "play") {
                 this.counter = (this.counter + 1) % timesDiscoEasy.length;
             } else { this.counter = 0 }
         }
-        if (gameDifficulty == "medium") {
+        if (gameDifficulty === "medium") {
             // Pushing fruits into array based on sheet music:
             if (timesDiscoMedium[this.counter].includes('ban')) {
                 this.fruitsArr.push(new banana(1));

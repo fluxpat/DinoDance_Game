@@ -1,15 +1,15 @@
 class Player2 {
-    constructor(speed) {
+    constructor() {
         this.idleAnimation = [];
         this.animationIndex = 0;
-        this.animationSpeed = speed;
+        this.animationSpeed = 0.18;
         // this.animationType = animationType;
     }
 
     preload() {
         console.log('player preload')
         this.dinoIdleJSON = loadJSON('dinoIdle.json')
-        this.dinoBlueSS = loadImage('assets/Player/DinoYellow.png')
+        this.dinoRedSS = loadImage('assets/Player/DinoRed.png')
     }
 
     setup() {
@@ -17,7 +17,7 @@ class Player2 {
         let framesIdle = this.dinoIdleJSON.frames;
         for (let i = 0; i < framesIdle.length; i++) {
             let pos = framesIdle[i].position;
-            let img = this.dinoBlueSS.get(pos.x, pos.y, pos.w, pos.h);
+            let img = this.dinoRedSS.get(pos.x, pos.y, pos.w, pos.h);
             this.idleAnimation.push(img);
         }
         console.log(this.idleAnimation);

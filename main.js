@@ -1,7 +1,7 @@
 game = new Game();
 let gameScreen;
-let gameSong; // For when I implement more songs
-let gameDifficulty; // To choose the game difficulty
+let gameSong = ""; // For when I implement more songs
+let gameDifficulty = ""; // To choose the game difficulty
 let font;
 let color1 = '#f5f5f5';
 let color2 = '#f5f5f5';
@@ -36,6 +36,7 @@ function setup() {
 }
 
 function draw() {
+    // console.log(gameSong, gameScreen, gameDifficulty) -------> Checking if the game settings are working properly
     clear();
     game.draw();
     // HOME SCREEN and GAME SETTINGS...
@@ -178,7 +179,7 @@ function gameSecCounter() {
 function mouseClicked() {
     // Starts the game ONLY when mouse is clicked on the START button
     if (gameScreen == "home") {
-        if (mouseX >= 602 && mouseX <= 782 && mouseY >= 502 && mouseY <= 538) {
+        if (gameSong === "disco" && mouseX >= 602 && mouseX <= 782 && mouseY >= 502 && mouseY <= 538) {
             gameScreen = "play";
             musicDisco.play();
             gameTimer = setInterval(gameSecCounter, 1000);
@@ -186,25 +187,28 @@ function mouseClicked() {
         // CHOOSE YOUR SONG:
         // Disco
         if (mouseX >= 493 && mouseX <= 598 && mouseY >= 352 && mouseY <= 380) {
+            gameSong = "disco"
             color1a = '#30b530';
             color2a = '#ffc832';
             color3a = '#ffc832';
         }
         // Rock
         // else if (mouseX >= 649 && mouseX <= 739 && mouseY >= 352 && mouseY <= 380) {
+        //     gameSong = "rock"
         //     color1a = '#ffc832';
         //     color2a = '#30b530';
         //     color3a = '#ffc832';
         // }
         // RnB
         // else if (mouseX >= 809 && mouseX <= 877 && mouseY >= 352 && mouseY <= 380) {
+        //     gameSong = "rnb"
         //     color1a = '#ffc832';
         //     color2a = '#ffc832';
         //     color3a = '#30b530';
         // }
         // CHOOSE YOUR DIFFICULTY:
         // EASY
-        else if (mouseX >= 500 && mouseX <= 586 && mouseY >= 425 && mouseY <= 448) {
+        if (mouseX >= 500 && mouseX <= 586 && mouseY >= 425 && mouseY <= 448) {
             colorAa = '#ff8800';
             colorBa = '#ffc832';
             colorCa = '#ffc832';
