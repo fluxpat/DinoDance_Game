@@ -7,7 +7,6 @@ class Player2 {
     }
 
     preload() {
-        console.log('player preload')
         this.dinoIdleJSON = loadJSON('dinoIdle.json')
         this.dinoRedSS = loadImage('assets/Player/DinoRed.png')
     }
@@ -20,7 +19,6 @@ class Player2 {
             let img = this.dinoRedSS.get(pos.x, pos.y, pos.w, pos.h);
             this.idleAnimation.push(img);
         }
-        console.log(this.idleAnimation);
     }
 
     draw() {

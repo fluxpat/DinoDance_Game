@@ -2,8 +2,6 @@ class Foreground {
     constructor() {
     }
     preload() {
-        console.log('foreground preload')
-
         // Text items
         this.titleBanner = loadImage('assets/Buttons/ButtonSheet.png')
     }

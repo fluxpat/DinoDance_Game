@@ -7,7 +7,6 @@ class Background {
         this.xCloud1 = 300; // Setting the clouds part way on screen so the sky isn't empty at the start
     }
     preload() {
-        console.log('background preload')
         // Player Platforms
         this.grassMid = loadImage('assets/Tiles/GrassMid.png');
         this.grassRight = loadImage('assets/Tiles/GrassRight.png');

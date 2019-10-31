@@ -51,7 +51,6 @@ class Game {
     }
 
     draw() {
-        console.log(frameRate())
         this.background.draw();
         /* ----------------------------------------RENDERS THE FRUIT FOR EACH PLAYER---------------------------------------- */
         // Remove fruit when they leave the screen

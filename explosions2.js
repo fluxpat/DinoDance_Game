@@ -10,7 +10,6 @@ class Explosions2 {
     }
 
     preload() {
-        console.log('Explosions preload')
         this.explosionsJSON = loadJSON('explosionFrames.json')
         this.badExplosion = loadImage('assets/Explosions/explosionBad.png')
         this.goodExplosion = loadImage('assets/Explosions/explosionGood.png')

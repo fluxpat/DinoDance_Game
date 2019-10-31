@@ -14,7 +14,6 @@ class Fires {
     }
 
     preload() {
-        console.log('Fires preload')
         this.firesJSON = loadJSON('fireFrames.json')
         this.blackFireImages = loadImage('assets/Fire/JumpingBlackFire.png')
         this.redFireImages = loadImage('assets/Fire/JumpingRedFire.png')

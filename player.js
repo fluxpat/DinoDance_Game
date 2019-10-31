@@ -7,7 +7,6 @@ class Player {
     }
 
     preload() {
-        console.log('player preload')
         this.dinoIdleJSON = loadJSON('dinoIdle.json')
         this.dinoYellowSS = loadImage('assets/Player/DinoYellow.png')
     }
@@ -20,7 +19,6 @@ class Player {
             let img = this.dinoYellowSS.get(pos.x, pos.y, pos.w, pos.h); // each frame image is now stored into the img variable
             this.idleAnimation.push(img); // each image is pushed into the idleAnimation array
         }
-        console.log(this.idleAnimation);
     }
 
     draw() {
