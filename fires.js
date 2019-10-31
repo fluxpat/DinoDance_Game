@@ -1,24 +1,37 @@
 class Fires {
     constructor() {
+        this.blackFireAnimation = [];
         this.redFireAnimation = [];
         this.blueFireAnimation = [];
-        this.redIndex;
-        this.blueIndex;
-        // this.display;
+        this.blackIndex1 = 0;
+        this.redIndex1 = 0;
+        this.blueIndex1 = 0;
+        this.blackIndex2 = 0;
+        this.redIndex2 = 0;
+        this.blueIndex2 = 0;
+        this.p1StreakLvl = 0;
+        this.p2StreakLvl = 0;
     }
 
     preload() {
-        console.log('Explosions preload')
+        console.log('Fires preload')
         this.firesJSON = loadJSON('fireFrames.json')
-        this.redFireImages = loadImage('assets/Explosions/explosionBad.png')
-        this.blueFireImages = loadImage('assets/Explosions/explosionGood.png')
+        this.blackFireImages = loadImage('assets/Fire/JumpingBlackFire.png')
+        this.redFireImages = loadImage('assets/Fire/JumpingRedFire.png')
+        this.blueFireImages = loadImage('assets/Fire/JumpingBlueFire.png')
     }
 
     setup() {
         // Establishing the frames for the spritesheet??
+        let blackFrames = this.firesJSON.blackFrames;
         let redFrames = this.firesJSON.redFrames;
         let blueFrames = this.firesJSON.blueFrames;
         // Pushing all the image frames into the respective arrays
+        for (let i = 0; i < blackFrames.length; i++) {
+            let pos = blackFrames[i].position;
+            let img = this.blackFireImages.get(pos.x, pos.y, pos.w, pos.h);
+            this.blackFireAnimation.push(img);
+        }
         for (let i = 0; i < redFrames.length; i++) {
             let pos = redFrames[i].position;
             let img = this.redFireImages.get(pos.x, pos.y, pos.w, pos.h);
@@ -32,51 +45,63 @@ class Fires {
     }
 
     draw() {
-        // console.log(this.goodAnimation)
-        if (this.display == "good") {
-            // Player 1 explosion rendering
-            if (this.key === "Q") { image(this.goodAnimation[this.goodIndex], 465, 610, 20, 20) }
-            else if (this.key === "W") { image(this.goodAnimation[this.goodIndex], 515, 610, 20, 20) }
-            else if (this.key === "E") { image(this.goodAnimation[this.goodIndex], 565, 610, 20, 20) }
-            else if (this.key === "R") { image(this.goodAnimation[this.goodIndex], 615, 610, 20, 20) }
-            if (frameCount % 1 === 0) { // Defines the speed of the animation (every 0.5 frames)
-                this.goodIndex++;
-            }
-            if (this.goodIndex === this.goodAnimation.length) { // When the animation reaches the end, it stops
-                this.display = false;
-                this.goodIndex = 0;
-            }
-        } else if (this.display == "great") {
-            if (this.key === "Q") { image(this.greatAnimation[this.greatIndex], 455, 600, 40, 40) }
-            else if (this.key === "W") { image(this.greatAnimation[this.greatIndex], 505, 600, 40, 40) }
-            else if (this.key === "E") { image(this.greatAnimation[this.greatIndex], 555, 600, 40, 40) }
-            else if (this.key === "R") { image(this.greatAnimation[this.greatIndex], 605, 600, 40, 40) }
-            if (frameCount % 1 === 0) { // Defines the speed of the animation (every 0.5 frames)
-                this.greatIndex++;
-            }
-            if (this.greatIndex === this.greatAnimation.length) { // When the animation reaches the end, it stops
-                this.display = false;
-                this.greatIndex = 0;
-            }
-        } else if (this.display == "perfect") {
-            if (this.key === "Q") { image(this.perfectAnimation[this.perfectIndex], 445, 590, 60, 60) }
-            else if (this.key === "W") { image(this.perfectAnimation[this.perfectIndex], 495, 590, 60, 60) }
-            else if (this.key === "E") { image(this.perfectAnimation[this.perfectIndex], 545, 590, 60, 60) }
-            else if (this.key === "R") { image(this.perfectAnimation[this.perfectIndex], 595, 590, 60, 60) }
-            if (frameCount % 1 === 0) { // Defines the speed of the animation (every 0.5 frames)
-                this.perfectIndex++;
-            }
-            if (this.perfectIndex === this.perfectAnimation.length) { // When the animation reaches the end, it stops
-                this.display = false;
-                this.perfectIndex = 0;
-            }
+        // console.log(this.blackIndex1)
+        // PLAYER 1's FIRED BEING RENDERED
+        if (this.p1StreakLvl >= 1) {
+            image(this.blackFireAnimation[frameCount % this.blackFireAnimation.length], 320, 590, 28, 90)
+
+        }
+        if (this.p1StreakLvl >= 2) {
+            image(this.redFireAnimation[frameCount % this.redFireAnimation.length], 350, 590, 28, 90)
+
+        }
+        if (this.p1StreakLvl >= 3) {
+            image(this.blueFireAnimation[frameCount % this.blueFireAnimation.length], 380, 590, 28, 90)
+        }
+        // // PLAYER 2's FIRES BEING RENDERED
+        if (this.p2StreakLvl >= 1) {
+            image(this.blackFireAnimation[frameCount % this.blackFireAnimation.length], width - 320 - 28, 590, 28, 90)
+        }
+        if (this.p2StreakLvl >= 2) {
+            image(this.redFireAnimation[frameCount % this.redFireAnimation.length], width - 350 - 28, 590, 28, 90)
+        }
+        if (this.p2StreakLvl >= 3) {
+            image(this.blueFireAnimation[frameCount % this.blueFireAnimation.length], width - 380 - 28, 590, 28, 90)
         }
     }
 
     /* ----------------------------------ACTIVATING THE FIRE ANIMATIONS---------------------------------- */
-    playGoodQ() {
-        this.display = "good";
-        this.goodIndex = 0;
-        this.key = "Q"
+    // PLAYER 1's FIRES
+    animateNoFire1() {
+        this.p1StreakLvl = 0;
+    }
+
+    animateBlackFire1() {
+        this.p1StreakLvl = 1;
+    }
+
+    animateRedFire1() {
+        this.p1StreakLvl = 2;
+    }
+
+    animateBlueFire1() {
+        this.p1StreakLvl = 3;
+    }
+
+    // PLAYER 2's FIRES
+    animateNoFire2() {
+        this.p2StreakLvl = 0;
+    }
+
+    animateBlackFire2() {
+        this.p2StreakLvl = 1;
+    }
+
+    animateRedFire2() {
+        this.p2StreakLvl = 2;
+    }
+
+    animateBlueFire2() {
+        this.p2StreakLvl = 3;
     }
 }

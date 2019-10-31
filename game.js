@@ -15,6 +15,7 @@ class Game {
         // EXPLOSIONS AND FIRES
         this.explosions1 = new Explosions1()
         this.explosions2 = new Explosions2()
+        this.fires = new Fires()
         // Counters:
         this.counter = 0;
         this.p1score = 0;
@@ -36,6 +37,7 @@ class Game {
         this.items.preload();
         this.explosions1.preload();
         this.explosions2.preload();
+        this.fires.preload();
     }
 
     setup() {
@@ -43,11 +45,13 @@ class Game {
         this.player2.setup();
         this.explosions1.setup();
         this.explosions2.setup();
+        this.fires.setup();
         // Establish a counter / metronome
         setInterval(this.timeIt, 250);
     }
 
     draw() {
+        console.log(frameRate())
         this.background.draw();
         /* ----------------------------------------RENDERS THE FRUIT FOR EACH PLAYER---------------------------------------- */
         // Remove fruit when they leave the screen
@@ -57,11 +61,13 @@ class Game {
                 (fruit, index) => {
                     fruit.draw();
                     if (fruit.playerID === 2 && fruit.y > 650) {
-                        this.fruitsArr.splice(index, 1);
+                        // this.fruitsArr.splice(index, 1);
+                        this.fruitsArr = this.fruitsArr.filter(element => element != fruit);
                         this.p2streak = 0;
                     }
                     if (fruit.playerID === 1 && fruit.y > 650) {
-                        this.fruitsArr.splice(index, 1);
+                        // this.fruitsArr.splice(index, 1);
+                        this.fruitsArr = this.fruitsArr.filter(element => element != fruit);
                         this.p1streak = 0;
                     }
                 }
@@ -73,6 +79,9 @@ class Game {
             this.p1streak = 0;
             this.p2score = 0;
             this.p2streak = 0;
+            // TURNING OFF THE FIRE MULTIPLIER ANIMATIONS
+            this.fires.animateNoFire1();
+            this.fires.animateNoFire2();
         }
         /* ----------------------------------------RENDERING PLAYERS AND FOREGROUND---------------------------------------- */
         this.foreground.draw();
@@ -111,38 +120,49 @@ class Game {
         text(game.p2streak, width - 107, 673);
         fill(245, 245, 245);
         text(game.p2streak, width - 110, 670);
-        // Streak Multiplier conditions:
+        /* -------------------------------------------------Streak Multiplier conditions:------------------------------------------------- */
         // Player 1
-        if (this.p1streak >= 40) {
+        if (this.p1streak >= 30) {
             this.p1multi = 2
             this.p1scoreColor = '#2cb5f5' // BLUE 2X multi
             this.player1.animationSpeed = 1;
-        } else if (this.p1streak >= 20) {
+            this.fires.animateBlueFire1();
+        } else if (this.p1streak >= 15) {
             this.p1multi = 1.4
             this.p1scoreColor = '#fee661' // YELLOW 1.4X multi
             this.player1.animationSpeed = 0.5;
+            this.fires.animateRedFire1();
+        } else if (this.p1streak >= 5) {
+            this.fires.animateBlackFire1()
         } else {
             this.p1multi = 1;
             this.p1scoreColor = '#f5f5f5' // WHITE no multi
             this.player1.animationSpeed = 0.18;
+            this.fires.animateNoFire1()
         }
         // Player 2
-        if (this.p2streak >= 40) {
+        if (this.p2streak >= 30) {
             this.p2multi = 2
             this.p2scoreColor = '#2cb5f5' // BLUE 2X multi
             this.player2.animationSpeed = 1;
-        } else if (this.p2streak >= 20) {
+            this.fires.animateBlueFire2();
+        } else if (this.p2streak >= 15) {
             this.p2multi = 1.4
             this.p2scoreColor = '#fee661' // YELLOW 1.4X multi
             this.player2.animationSpeed = 0.5;
+            this.fires.animateRedFire2();
+        } else if (this.p2streak >= 5) {
+            this.fires.animateBlackFire2()
         } else {
             this.p2multi = 1;
             this.p2scoreColor = '#f5f5f5' // WHITE no multi
             this.player2.animationSpeed = 0.18;
+            this.fires.animateNoFire2()
         }
         /* ----------------------------------RUNNING THE CHECKS FOR WHEN TO ANIMATE EXPLOSIONS---------------------------------- */
         this.explosions1.draw();
         this.explosions2.draw();
+        this.fires.draw();
     }
 
     keyPressed() {
@@ -171,7 +191,8 @@ class Game {
                                 this.explosions1.playGoodQ(); // EXPLOSION!!!!!
                             }
                             this.p1streak++;
-                            this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
+                            // this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
+                            this.fruitsArr = this.fruitsArr.filter(element => element != fruit);
                         }
                     }
                     if (keyIsDown(87) && fruit.type === 'grapes') {
@@ -187,7 +208,8 @@ class Game {
                                 this.explosions1.playGoodW(); // EXPLOSION!!!!!
                             }
                             this.p1streak++;
-                            this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
+                            // this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
+                            this.fruitsArr = this.fruitsArr.filter(element => element != fruit);
 
                         }
                     }
@@ -204,7 +226,8 @@ class Game {
                                 this.explosions1.playGoodE(); // EXPLOSION!!!!!
                             }
                             this.p1streak++;
-                            this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
+                            // this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
+                            this.fruitsArr = this.fruitsArr.filter(element => element != fruit);
                         }
                     }
                     if (keyIsDown(82) && fruit.type === 'apple') {
@@ -220,7 +243,8 @@ class Game {
                                 this.explosions1.playGoodR(); // EXPLOSION!!!!!
                             }
                             this.p1streak++;
-                            this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
+                            // this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
+                            this.fruitsArr = this.fruitsArr.filter(element => element != fruit);
                         }
                     }
                 }
@@ -239,7 +263,8 @@ class Game {
                                 this.explosions2.playGoodU(); // EXPLOSION!!!!!
                             }
                             this.p2streak++;
-                            this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
+                            // this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
+                            this.fruitsArr = this.fruitsArr.filter(element => element != fruit);
                         }
                     }
                     if (keyIsDown(73) && fruit.type === 'grapes') {
@@ -255,7 +280,8 @@ class Game {
                                 this.explosions2.playGoodI(); // EXPLOSION!!!!!
                             }
                             this.p2streak++;
-                            this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
+                            // this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
+                            this.fruitsArr = this.fruitsArr.filter(element => element != fruit);
                         }
                     }
                     if (keyIsDown(79) && fruit.type === 'aubergine') {
@@ -271,7 +297,8 @@ class Game {
                                 this.explosions2.playGoodO(); // EXPLOSION!!!!!
                             }
                             this.p2streak++;
-                            this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
+                            // this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
+                            this.fruitsArr = this.fruitsArr.filter(element => element != fruit);
                         }
                     }
                     if (keyIsDown(80) && fruit.type === 'apple') {
@@ -287,7 +314,8 @@ class Game {
                                 this.explosions2.playGoodP(); // EXPLOSION!!!!!
                             }
                             this.p2streak++;
-                            this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
+                            // this.fruitsArr.splice(index, 1) // Removes fruit if hit, regardless of hit level
+                            this.fruitsArr = this.fruitsArr.filter(element => element != fruit);
                         }
                     }
                 }

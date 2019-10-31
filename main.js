@@ -97,6 +97,9 @@ function draw() {
         } else {
             text("IT'S A DRAW!", width / 2, 400)
         }
+        // TURNING OFF THE FIRE MULTIPLIER ANIMATIONS
+        this.game.fires.animateNoFire1();
+        this.game.fires.animateNoFire2();
     }
     // MOUSE HOVERS:
     // Home Screen
@@ -157,6 +160,12 @@ function draw() {
             color1 = 245;
         }
     }
+    // Credit:
+    textFont(font);
+    textAlign(CENTER)
+    fill(245);
+    textSize(20)
+    text("A game by Patrick Cho", width - 125, 20);
 }
 
 function keyPressed() {
