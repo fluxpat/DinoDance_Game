@@ -27,6 +27,9 @@ function preload() {
     font = loadFont("assets/FutilePro.ttf");
     game.preload();
     musicDisco = loadSound('assets/Song1 Disco.wav');
+    startNoise = loadSound('assets/Wav/gameStart.wav')
+    gameChoose = loadSound('assets/Wav/gameChoose.wav')
+    errorNoise = loadSound('assets/Wav/errorNoise.wav')
 }
 
 function setup() {
@@ -190,7 +193,8 @@ function mouseClicked() {
     if (gameScreen == "home") {
         if (gameSong === "disco" && gameDifficulty != "" && mouseX >= 602 && mouseX <= 782 && mouseY >= 502 && mouseY <= 538) {
             gameScreen = "play";
-            musicDisco.play();
+            musicDisco.play(1);
+            startNoise.play();
             gameTimer = setInterval(gameSecCounter, 1000);
         }
         // CHOOSE YOUR SONG:
@@ -200,21 +204,24 @@ function mouseClicked() {
             color1a = '#30b530';
             color2a = '#ffc832';
             color3a = '#ffc832';
+            gameChoose.play();
         }
         // Rock
-        // else if (mouseX >= 649 && mouseX <= 739 && mouseY >= 352 && mouseY <= 380) {
-        //     gameSong = "rock"
-        //     color1a = '#ffc832';
-        //     color2a = '#30b530';
-        //     color3a = '#ffc832';
-        // }
+        else if (mouseX >= 649 && mouseX <= 739 && mouseY >= 352 && mouseY <= 380) {
+            errorNoise.play();
+            // gameSong = "rock"
+            // color1a = '#ffc832';
+            // color2a = '#30b530';
+            // color3a = '#ffc832';
+        }
         // RnB
-        // else if (mouseX >= 809 && mouseX <= 877 && mouseY >= 352 && mouseY <= 380) {
-        //     gameSong = "rnb"
-        //     color1a = '#ffc832';
-        //     color2a = '#ffc832';
-        //     color3a = '#30b530';
-        // }
+        else if (mouseX >= 809 && mouseX <= 877 && mouseY >= 352 && mouseY <= 380) {
+            errorNoise.play();
+            //     gameSong = "rnb"
+            //     color1a = '#ffc832';
+            //     color2a = '#ffc832';
+            //     color3a = '#30b530';
+        }
         // CHOOSE YOUR DIFFICULTY:
         // EASY
         if (mouseX >= 500 && mouseX <= 586 && mouseY >= 425 && mouseY <= 448) {
@@ -222,6 +229,7 @@ function mouseClicked() {
             colorBa = '#ffc832';
             colorCa = '#ffc832';
             gameDifficulty = 'easy'
+            gameChoose.play();
         }
         // MED
         else if (mouseX >= 659 && mouseX <= 728 && mouseY >= 425 && mouseY <= 448) {
@@ -229,6 +237,7 @@ function mouseClicked() {
             colorBa = '#ff8800';
             colorCa = '#ffc832';
             gameDifficulty = 'medium'
+            gameChoose.play();
         }
         // HARD
         else if (mouseX >= 796 && mouseX <= 892 && mouseY >= 425 && mouseY <= 448) {
@@ -236,6 +245,7 @@ function mouseClicked() {
             colorBa = '#ffc832';
             colorCa = '#ff8800';
             gameDifficulty = 'hard'
+            gameChoose.play();
         }
     }
     else if (gameScreen === "end") {
