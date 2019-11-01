@@ -18,6 +18,14 @@ class grapes {
         } else if (this.playerID === 2) {
             image(this.grapes, 805, this.y, 40, 40)
         }
-        this.y += 2;
+        if (gameDifficulty === "easy") {
+            this.y += 1.5;
+        }
+        if (gameDifficulty === "medium") {
+            this.y += 2;
+        }
+        if (gameDifficulty === "hard") {
+            this.y += 3;
+        }
     }
 }

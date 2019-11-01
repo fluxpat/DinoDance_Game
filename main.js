@@ -188,7 +188,7 @@ function gameSecCounter() {
 function mouseClicked() {
     // Starts the game ONLY when mouse is clicked on the START button
     if (gameScreen == "home") {
-        if (gameSong === "disco" && mouseX >= 602 && mouseX <= 782 && mouseY >= 502 && mouseY <= 538) {
+        if (gameSong === "disco" && gameDifficulty != "" && mouseX >= 602 && mouseX <= 782 && mouseY >= 502 && mouseY <= 538) {
             gameScreen = "play";
             musicDisco.play();
             gameTimer = setInterval(gameSecCounter, 1000);
@@ -231,12 +231,12 @@ function mouseClicked() {
             gameDifficulty = 'medium'
         }
         // HARD
-        // else if (mouseX >= 796 && mouseX <= 892 && mouseY >= 425 && mouseY <= 448) {
-        //     colorAa = '#ffc832';
-        //     colorBa = '#ffc832';
-        //     colorCa = '#ff8800';
-        //     gameDifficulty = 'hard'
-        // }
+        else if (mouseX >= 796 && mouseX <= 892 && mouseY >= 425 && mouseY <= 448) {
+            colorAa = '#ffc832';
+            colorBa = '#ffc832';
+            colorCa = '#ff8800';
+            gameDifficulty = 'hard'
+        }
     }
     else if (gameScreen === "end") {
         if (mouseX >= 563 && mouseX <= 820 && mouseY >= 460 && mouseY <= 498) {

@@ -71,7 +71,7 @@ class Game {
                     }
                 }
             )
-        } else { this.fruitsArr = [] }
+        } /* else { this.fruitsArr = [] } */
         /* ----------------------------------------RESET SCORES WHEN GAME RESTARTS---------------------------------------- */
         if (gameScreen == "home") {
             this.p1score = 0;
@@ -81,6 +81,8 @@ class Game {
             // TURNING OFF THE FIRE MULTIPLIER ANIMATIONS
             this.fires.animateNoFire1();
             this.fires.animateNoFire2();
+            this.fruitsArr = [];
+            this.counter = 0;
         }
         /* ----------------------------------------RENDERING PLAYERS AND FOREGROUND---------------------------------------- */
         this.foreground.draw();
@@ -171,6 +173,7 @@ class Game {
             musicDisco.stop(); // Have hard coded the song here. Will need to make dynamic for when more songs are added.
             clearInterval(gameTimer);
             gameSeconds = 0;
+            this.fruitsArr = [];
         }
 
         this.fruitsArr.forEach(
@@ -365,13 +368,32 @@ class Game {
             }
             this.counter = (this.counter + 1) % timesDiscoMedium.length;
         }
+        if (gameDifficulty === "hard") {
+            // Pushing fruits into array based on sheet music:
+            if (timesDiscoHard[this.counter].includes('ban')) {
+                this.fruitsArr.push(new banana(1));
+                this.fruitsArr.push(new banana(2));
+            }
+            if (timesDiscoHard[this.counter].includes('gra')) {
+                this.fruitsArr.push(new grapes(1));
+                this.fruitsArr.push(new grapes(2));
+            }
+            if (timesDiscoHard[this.counter].includes('aub')) {
+                this.fruitsArr.push(new aubergine(1));
+                this.fruitsArr.push(new aubergine(2));
+            }
+            if (timesDiscoHard[this.counter].includes('app')) {
+                this.fruitsArr.push(new apple(1));
+                this.fruitsArr.push(new apple(2));
+            }
+            this.counter = (this.counter + 1) % timesDiscoHard.length;
+        }
     }
 }
 
 // Game Fruit Generation:
 
 const timesDiscoEasy = [ // Essentially my music score here where each element of the parent array is a quaver (half a beat (1/4 of a second))
-    /* Wait 8 beats before rendering any fruits to allow for first group to fall and player to get ready */
     ['app'], [], [], [],
     ['app'], [], [], [],
     ['app'], [], [], [],
@@ -411,7 +433,6 @@ const timesDiscoEasy = [ // Essentially my music score here where each element o
 ]
 
 const timesDiscoMedium = [ // Essentially my music score here where each element of the parent array is a quaver (half a beat (1/4 of a second))
-    /* Wait 8 beats before rendering any fruits to allow for first group to fall and player to get ready */
     ["ban"], [], [], [],
     ["gra"], [], [], [],
     ["aub"], [], [], [],
@@ -446,6 +467,44 @@ const timesDiscoMedium = [ // Essentially my music score here where each element
     ["ban"], [], ['aub'], [],
     ["ban"], ['aub'], ['aub'], [],
     ["ban"], ['app'], ['aub'], ['app'],
+    ["ban"], ['gra'], ['aub'], ['app'],
+    // ------------------- 32 seconds
+]
+const timesDiscoHard = [ // Essentially my music score here where each element of the parent array is a quaver (half a beat (1/4 of a second))
+    ["ban"], ['aub'], [], [],
+    ["gra"], ['app'], [], [],
+    ["ban"], ['aub'], [], [],
+    ["gra"], ['aub'], [], [], // 8 beats ends here (4 seconds)
+    ["ban", 'aub'], ["ban", 'aub'], [], [],
+    ["gra", 'app'], ["gra", 'app'], [], [],
+    ["ban", 'aub'], ["ban", 'aub'], [], [],
+    ["gra", 'app'], ["gra", 'app'], [], [],
+    // ------------------- 8 seconds
+    ["ban"], ['app'], ['gra', 'aub'], ['app'],
+    ["ban"], ['app'], ['gra', 'aub'], ['app'],
+    ["ban"], ['app'], ['gra', 'aub'], ['app'],
+    ["ban"], ['app'], ['gra', 'aub'], ['app'],
+    ["ban"], ['app'], ['aub'], ['gra'],
+    ["ban"], ['app'], ['aub'], ['gra'],
+    ["app"], ['gra'], ['app'], ['gra'],
+    ["aub"], ['ban'], ['aub'], ['ban'],
+    // ------------------- 16 seconds
+    ["ban"], [], ["ban", 'aub'], [],
+    ['gra'], [], ["ban"], [],
+    ["ban"], [], ["ban", 'aub'], [],
+    ['gra'], [], ["ban"], [],
+    ["ban"], ['app'], [], ['gra', 'aub'],
+    ["ban"], ['app'], ['gra', 'aub'], [],
+    ["ban"], ['app'], [], ['gra', 'aub'],
+    ["ban"], ['app'], ['gra', 'aub'], [],
+    // ------------------- 24 seconds
+    ['gra', 'app'], ['gra', 'app'], ["ban"], ['ban'],
+    ['aub'], ['ban'], ['gra', 'app'], ['gra', 'app'],
+    ['ban', 'aub'], ['ban', 'aub'], ['app'], ['app'],
+    ['aub'], ['ban'], ['gra', 'app'], ['gra', 'app'],
+    ['ban', 'gra', 'aub'], [], ['ban', 'gra', 'aub'], [],
+    ['gra', 'aub', 'app'], [], ['gra', 'aub', 'app'], [],
+    ['ban', 'aub', 'app'], [], ['ban', 'aub', 'app'], [],
     ["ban"], ['gra'], ['aub'], ['app'],
     // ------------------- 32 seconds
 ]
