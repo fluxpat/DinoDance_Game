@@ -19,7 +19,7 @@ class apple {
             image(this.apple, 905, this.y, 40, 40)
         }
         if (gameDifficulty === "easy") {
-            this.y += 1.5;
+            this.y += 2;
         }
         if (gameDifficulty === "medium") {
             this.y += 2;

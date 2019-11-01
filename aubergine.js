@@ -19,7 +19,7 @@ class aubergine {
             image(this.aubergine, 855, this.y, 40, 40)
         }
         if (gameDifficulty === "easy") {
-            this.y += 1.5;
+            this.y += 2;
         }
         if (gameDifficulty === "medium") {
             this.y += 2;
