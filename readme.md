@@ -2,12 +2,15 @@
 ## An arcade-style musical rhythm game (made with P5.js, HTML & CSS)
 **BACKGROUND:**
 
-This project is a culmination of 2 weeks of intensive learning of HTML, CSS and Javascript, and a celebration of the great arcade games of the 80s, 90s and early 2000s.
+This project is a culmination of 2 weeks of learning the fundamentals of HTML, CSS and Javascript, and a celebration of the arcade games of the 80s, 90s and early 2000s.
+
 It was an opportunity to practise and implement core concepts whilst learning to code a project from start to finish in a short time frame.
+
+![Screenshot of game in action](https://raw.githubusercontent.com/fluxpat/DinoDance_Game/master/Screenshot.png)
 
 **THE GOAL:**
 
-1. develop a fully playable and rendered game in just 4 days.
+1. develop a fully playable and rendered game in 4 days.
 2. optional challenge of making game 2 player
 3. design logic for winning with visual feedback
 4. include separate HTML, CSS and JS files
