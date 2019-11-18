@@ -1,6 +1,6 @@
 # DINO DANCE
 ## An arcade-style musical rhythm game (made with P5.js, HTML & CSS)
-## Click here to play! https://fluxpat.github.io/DinoDance_Game/
+### Click here to play! https://fluxpat.github.io/DinoDance_Game/
 **BACKGROUND:**
 
 This project is a culmination of 2 weeks of learning the fundamentals of HTML, CSS and Javascript, and a celebration of the arcade games of the 80s, 90s and early 2000s.
